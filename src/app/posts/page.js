@@ -1,4 +1,4 @@
-import { connect } from "@/lib/connect";
+import { connect } from "@/utilities/connect";
 import { auth } from "@clerk/nextjs/server";
 
 export default async function PostPage() {
@@ -7,24 +7,19 @@ export default async function PostPage() {
 
   const db = connect();
   const posts = await db.query(
-    `SELECT 
-        post.id, 
-        profiles.username, 
-        posts.content 
-        FROM posts 
+    `SELECT * FROM posts 
     INNER JOIN profiles ON posts.clerk_id = profiles.clerk_id`
   );
 
-  async function () {
-    "use server"
+  async function handleCreatePost(formData) {
+    "use server";
     const db = connect();
     const content = formData.get("content");
     await db.query(
-      `INSERT INTO posts (clerk_is, content)
+      `INSERT INTO posts (clerk_id, content)
       VALUES ($1, $2)`,
       [userId, content]
     );
-    
   }
 
   return (
