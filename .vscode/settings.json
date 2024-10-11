@@ -1,0 +1,33 @@
+{
+  "folder-color.pathColors": [
+    {
+      "folderPath": "week09-project/src/app/posts/",
+      "color": "foldercolorizer.SkyBlue"
+    },
+    {
+      "folderPath": "week09-project/src/app/profile/",
+      "color": "foldercolorizer.green"
+    },
+    {
+      "folderPath": "week09-project/src/app/sign-in/",
+      "color": "foldercolorizer.LightPink"
+    },
+    {
+      "folderPath": "week09-project/src/app/sign-up/",
+      "color": "foldercolorizer.LightSalmon"
+    },
+    {
+      "folderPath": "week09-project/src/components/",
+      "color": "foldercolorizer.SteelBlue"
+    },
+    {
+      "folderPath": "week09-project/src/app/page.js/",
+      "color": "foldercolorizer.CarrotOrange",
+      "badge": "🏘️"
+    },
+    {
+      "folderPath": "week09-project/seed.sql/",
+      "color": "foldercolorizer.GreenYellow"
+    }
+  ]
+}
