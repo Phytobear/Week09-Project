@@ -1,4 +1,4 @@
-import { connect } from "@/lib/connect";
+import { connect } from "@/utilities/connect";
 import { auth } from "@clerk/nextjs/server";
 
 export default function ProfileForm() {

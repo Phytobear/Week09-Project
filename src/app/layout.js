@@ -1,3 +1,4 @@
+import NavBar from "@/components/NavBar";
 import {
   ClerkProvider,
   SignedIn,
@@ -18,7 +19,7 @@ export default function RootLayout({ children }) {
           <SignedIn>
             <UserButton />
           </SignedIn>
-
+          <NavBar />
           {children}
           <footer>I am the footer</footer>
         </body>
