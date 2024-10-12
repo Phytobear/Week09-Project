@@ -4,6 +4,7 @@ import Link from "next/link";
 import ProfileForm from "@/components/ProfileForm";
 import UserPosts from "@/components/UserPosts";
 import { connect } from "@/utilities/connect";
+import { notFound } from "next/navigation";
 
 export default async function ProfilePage() {
   const user = await currentUser();
@@ -12,10 +13,13 @@ export default async function ProfilePage() {
     `SELECT posts.id, posts.content, profiles.username 
      FROM posts 
      INNER JOIN profiles ON posts.clerk_id = profiles.clerk_id 
-     WHERE posts.clerk_id = $1`,
+     WHERE posts.clerk_id = $1
+     ORDER BY posts.timestamp DESC`,
     [user.id]
   );
   const posts = result.rows;
+
+  console.log(user);
 
   return (
     <div>
@@ -24,6 +28,7 @@ export default async function ProfilePage() {
           Welcome {user?.firstName} {user?.lastName}
         </h2>
         <p>You are signed in with {user?.emailAddresses[0].emailAddress}</p>
+        <p>Bio: {user?.bio}</p>
         <ProfileForm />
         <UserPosts posts={posts} />
       </SignedIn>

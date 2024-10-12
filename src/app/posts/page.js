@@ -5,8 +5,6 @@ import { auth } from "@clerk/nextjs/server";
 export default async function PostPage() {
   const { userId } = auth();
 
-  console.log("Authenticated userId:", userId);
-
   const db = connect();
   const posts = await db.query(
     `SELECT * FROM posts 

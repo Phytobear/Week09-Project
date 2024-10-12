@@ -1,23 +1,24 @@
 import { connect } from "@/utilities/connect";
 import { auth } from "@clerk/nextjs/server";
 
-export default function ProfileForm() {
-  const { userId } = auth();
-
+export default function ProfileForm({ existingUsername, existingBio }) {
   async function handleUpdateProfile(formData) {
     "use server";
     const db = connect();
+    const { userId } = auth();
+
     // get the information from the form
     const username = formData.get("username");
     const bio = formData.get("bio");
 
-    // check whether a profile exists
+    // check whether profile exists
     const profiles = await db.query(
       `SELECT * FROM profiles WHERE clerk_id = $1`,
       [userId]
     );
+
     if (profiles.rowCount === 0) {
-      // insert our profile into the DB
+      // insert the profile
       await db.query(
         `INSERT INTO profiles (clerk_id, username, bio) VALUES ($1, $2, $3)`,
         [userId, username, bio]
@@ -34,8 +35,16 @@ export default function ProfileForm() {
   return (
     <div>
       <form action={handleUpdateProfile}>
-        <input name="username" placeholder="Username" />
-        <textarea name="bio" placeholder="Bio"></textarea>
+        <input
+          name="username"
+          placeholder="Username"
+          defaultValue={existingUsername} // Prefill username if there is one
+        />
+        <textarea
+          name="bio"
+          placeholder="Bio"
+          defaultValue={existingBio} // Prefill bio if there is one
+        />
         <button>Submit</button>
       </form>
     </div>

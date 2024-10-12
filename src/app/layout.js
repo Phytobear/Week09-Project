@@ -21,7 +21,6 @@ export default function RootLayout({ children }) {
           </SignedIn>
           <NavBar />
           {children}
-          <footer>I am the footer</footer>
         </body>
       </html>
     </ClerkProvider>

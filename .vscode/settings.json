@@ -6,7 +6,7 @@
     },
     {
       "folderPath": "week09-project/src/app/profile/",
-      "color": "foldercolorizer.green"
+      "color": "foldercolorizer.SpringGreen"
     },
     {
       "folderPath": "week09-project/src/app/sign-in/",
@@ -28,6 +28,14 @@
     {
       "folderPath": "week09-project/seed.sql/",
       "color": "foldercolorizer.GreenYellow"
+    },
+    {
+      "folderPath": "week09-project/src/app/profile/page.js/",
+      "color": "foldercolorizer.SpringGreen"
+    },
+    {
+      "folderPath": "week09-project/src/app/profile/not-found.js/",
+      "color": "foldercolorizer.SpringGreen"
     }
   ]
 }

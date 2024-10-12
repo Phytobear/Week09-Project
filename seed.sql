@@ -28,3 +28,11 @@ values
   ('clerk1', 'Another insightful post by user1.'),
   ('clerk2', 'Post by user2 sharing some thoughts.'),
   ('clerk3', 'User3''s first post!');
+
+
+  ALTER TABLE posts
+ADD COLUMN createdAt TIMESTAMP DEFAULT NOW();
+
+UPDATE posts
+SET timestamp = NOW()
+WHERE timestamp IS NULL;
