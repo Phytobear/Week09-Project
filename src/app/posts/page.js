@@ -13,8 +13,6 @@ export default async function PostPage() {
     INNER JOIN profiles ON posts.clerk_id = profiles.clerk_id`
   );
 
-  console.log("Posts data:", posts.rows);
-
   return (
     <div>
       <PostsForm />
