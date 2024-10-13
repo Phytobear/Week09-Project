@@ -1,7 +1,8 @@
 import { connect } from "@/utilities/connect";
 import { auth } from "@clerk/nextjs/server";
+import Link from "next/link";
 
-export default function UserPosts({ posts }) {
+export default function UserPosts({ posts, loggedInUserId }) {
   console.log(posts);
 
   return (
@@ -9,7 +10,15 @@ export default function UserPosts({ posts }) {
       <h2>Your Posts</h2>
       {posts.map((post) => (
         <div key={post.id}>
-          <h4>{post.username ? post.username : "Anonymous"} says:</h4>
+          <h4>
+            {post.clerk_id === loggedInUserId ? (
+              post.username
+            ) : (
+              <Link href={`/profile/${post.clerk_id}`}>
+                {post.username ? post.username : "Anonymous"} says:
+              </Link>
+            )}
+          </h4>
           <p>{post.content}</p>
         </div>
       ))}

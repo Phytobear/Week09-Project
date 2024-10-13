@@ -1,23 +1,22 @@
-import pg from "pg";
+import { connect } from "@/utilities/connect";
 import { auth } from "@clerk/nextjs/server";
 
-export async function POST(req, { params }) {
-  const pool = new pg.Pool({
-    connectionString: process.env.DB_URL,
-  });
+export default async function handler(req, res) {
+  if (req.method === "POST") {
+    const { content } = req.body;
+    const { userId } = auth();
 
-  const { id } = params;
-  const { content } = Object.fromEntries(await req.formData());
-  const { userId } = auth();
+    const db = connect();
 
-  try {
-    const updateQuery =
-      "UPDATE posts SET content = $1 WHERE id = $2 AND clerk_id = $3";
-    await pool.query(updateQuery, [content, id, userId]);
+    // Insert the post into the database
+    const result = await db.query(
+      `INSERT INTO posts (clerk_id, content, stimestamp) VALUES ($1, $2, NOW()) RETURNING *`,
+      [userId, content]
+    );
 
-    return new Response("Post updated successfully", { status: 200 });
-  } catch (error) {
-    console.error("Error updating post:", error);
-    return new Response("Failed to update post", { status: 500 });
+    const newPost = result.rows[0];
+    res.status(200).json(newPost);
+  } else {
+    res.status(405).json({ message: "Method not allowed" });
   }
 }

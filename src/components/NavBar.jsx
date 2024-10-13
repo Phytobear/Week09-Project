@@ -11,7 +11,7 @@ export default function NavBar() {
           <Link href="/posts">Posts</Link>
         </li>
         <li>
-          <Link href="/profile/${profile.id}">Profile</Link>
+          <Link href="/profile">My Profile</Link>
         </li>
       </ul>
     </nav>

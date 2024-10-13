@@ -1,29 +1,25 @@
 import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
+import ProfileForm from "@/components/ProfileForm";
 import UserPosts from "@/components/UserPosts";
 import { connect } from "@/utilities/connect";
-import { notFound } from "next/navigation";
 
-export default async function ProfilePage({ params }) {
-  const profileId = params["profile.id"];
+export default async function UserProfilePage() {
+  const user = await currentUser();
 
-  // console.log("Profile ID from URL:", profileId);
-  console.log("Params object:", params);
+  if (!user) {
+    return <p>Could not load user information</p>;
+  }
 
   const db = connect();
 
-  //Fetch profile
   const profileResult = await db.query(
     `SELECT * FROM profiles WHERE clerk_id = $1`,
-    [profileId]
+    [user.id]
   );
 
   const profile = profileResult.rows[0];
-
-  // If no profile show the error page
-  if (!profile) {
-    return notFound();
-  }
 
   const postsResult = await db.query(
     `SELECT posts.id, posts.content, profiles.username 
@@ -31,7 +27,7 @@ export default async function ProfilePage({ params }) {
      INNER JOIN profiles ON posts.clerk_id = profiles.clerk_id 
      WHERE posts.clerk_id = $1
      ORDER BY posts.timestamp DESC`,
-    [profileId]
+    [user.id]
   );
 
   const posts = postsResult.rows;
@@ -39,8 +35,12 @@ export default async function ProfilePage({ params }) {
   return (
     <div>
       <SignedIn>
-        <h2>Welcome to {profile.username}s Profile</h2>
-        <p>Bio: {profile.bio || "No bio available."}</p>
+        <h2>Welcome {profile?.username || "User"}</h2>
+        <p>Bio: {profile?.bio || "No bio available."}</p>
+        <ProfileForm
+          existingUsername={profile?.username}
+          existingBio={profile?.bio}
+        />
         <UserPosts posts={posts} />
       </SignedIn>
 

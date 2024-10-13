@@ -38,12 +38,12 @@ export default function ProfileForm({ existingUsername, existingBio }) {
         <input
           name="username"
           placeholder="Username"
-          defaultValue={existingUsername} // Prefill username if there is one
+          defaultValue={existingUsername} // Prefill username if there is one, but dosnt work???
         />
         <textarea
           name="bio"
           placeholder="Bio"
-          defaultValue={existingBio} // Prefill bio if there is one
+          defaultValue={existingBio} // Prefill bio if there is one, but dosnt work???
         />
         <button>Submit</button>
       </form>

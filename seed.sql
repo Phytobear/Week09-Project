@@ -36,3 +36,9 @@ ADD COLUMN createdAt TIMESTAMP DEFAULT NOW();
 UPDATE posts
 SET timestamp = NOW()
 WHERE timestamp IS NULL;
+
+
+SELECT posts.id, posts.content, profiles.username, posts.clerk_id
+FROM posts
+INNER JOIN profiles ON posts.clerk_id = profiles.clerk_id
+ORDER BY posts.timestamp DESC
