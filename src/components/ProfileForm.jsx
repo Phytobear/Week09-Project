@@ -1,51 +1,54 @@
-import { connect } from "@/utilities/connect";
-import { auth } from "@clerk/nextjs/server";
+"use client";
+
+import { useState } from "react";
+import { TextField, Button } from "@mui/material";
 
 export default function ProfileForm({ existingUsername, existingBio }) {
-  async function handleUpdateProfile(formData) {
-    "use server";
-    const db = connect();
-    const { userId } = auth();
+  const [username, setUsername] = useState(existingUsername || "");
+  const [bio, setBio] = useState(existingBio || "");
 
-    // get the information from the form
-    const username = formData.get("username");
-    const bio = formData.get("bio");
+  async function handleSubmit(event) {
+    event.preventDefault();
 
-    // check whether profile exists
-    const profiles = await db.query(
-      `SELECT * FROM profiles WHERE clerk_id = $1`,
-      [userId]
-    );
+    const res = await fetch("/api/profile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, bio }),
+    });
 
-    if (profiles.rowCount === 0) {
-      // insert the profile
-      await db.query(
-        `INSERT INTO profiles (clerk_id, username, bio) VALUES ($1, $2, $3)`,
-        [userId, username, bio]
-      );
+    if (res.ok) {
+      console.log("Profile updated successfully");
     } else {
-      // update the existing item
-      await db.query(
-        `UPDATE profiles SET username=$1, bio=$2 WHERE clerk_id=$3`,
-        [username, bio, userId]
-      );
+      console.error("error updating profile");
     }
   }
 
   return (
     <div>
-      <form action={handleUpdateProfile}>
-        <input
+      <form onSubmit={handleSubmit}>
+        <TextField
           name="username"
-          placeholder="Username"
-          defaultValue={existingUsername} // Prefill username if there is one, but dosnt work???
+          label="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          fullWidth
+          margin="normal"
         />
-        <textarea
+        <TextField
           name="bio"
-          placeholder="Bio"
-          defaultValue={existingBio} // Prefill bio if there is one, but dosnt work???
+          label="Bio"
+          value={bio}
+          onChange={(e) => setBio(e.target.value)}
+          fullWidth
+          margin="normal"
+          multiline
+          rows={4}
         />
-        <button>Submit</button>
+        <Button variant="contained" color="primary" type="submit">
+          Update Profile
+        </Button>
       </form>
     </div>
   );

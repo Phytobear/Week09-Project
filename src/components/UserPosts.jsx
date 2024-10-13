@@ -1,27 +1,25 @@
-import { connect } from "@/utilities/connect";
-import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
+import { Grid2, Paper, Typography } from "@mui/material";
 
-export default function UserPosts({ posts, loggedInUserId }) {
-  console.log(posts);
-
+export default function UserPosts({ posts, LoggedInUserId }) {
   return (
-    <div>
-      <h2>Your Posts</h2>
+    <Grid2 container spacing={2} justifyContent="center">
       {posts.map((post) => (
-        <div key={post.id}>
-          <h4>
-            {post.clerk_id === loggedInUserId ? (
-              post.username
-            ) : (
-              <Link href={`/profile/${post.clerk_id}`}>
-                {post.username ? post.username : "Anonymous"} says:
-              </Link>
-            )}
-          </h4>
-          <p>{post.content}</p>
-        </div>
+        <Grid2 item xs={12} sm={6} md={4} key={post.id}>
+          <Paper elevation={3} sx={{ padding: 2 }}>
+            <Typography variant="h6">
+              {post.clerk_id === LoggedInUserId ? (
+                post.username
+              ) : (
+                <Link href={`/profile/${post.clerk_id}`} underline="hover">
+                  {post.username ? post.username : "Anonymous"} says:
+                </Link>
+              )}
+            </Typography>
+            <Typography variant="body1">{post.content}</Typography>
+          </Paper>
+        </Grid2>
       ))}
-    </div>
+    </Grid2>
   );
 }

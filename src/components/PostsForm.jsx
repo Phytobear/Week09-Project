@@ -1,30 +1,43 @@
-import { connect } from "@/utilities/connect";
-import { auth } from "@clerk/nextjs/server";
+"use client";
+
+import { useState } from "react";
+import { TextField, Button } from "@mui/material";
 
 export default function PostsForm() {
-  async function handleSubmit(formData) {
-    "use server";
-    const db = connect();
-    const { userId } = auth(); // Get userId
+  const [content, setContent] = useState("");
 
-    const content = formData.get("content");
+  async function handleSubmit(event) {
+    event.preventDefault();
 
-    // Insert the post into posts table
-    await db.query(
-      `INSERT INTO posts (clerk_id, content)
-    VALUES ($1, $2)`,
-      [userId, content]
-    );
+    const res = await fetch("/api/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content }),
+    });
+
+    if (res.ok) {
+      setContent("");
+    }
   }
 
   return (
-    <div>
-      <h2>Posts</h2>
-      <h3>Add New Post</h3>
-      <form action={handleSubmit}>
-        <textarea name="content" placeholder="New Post"></textarea>
-        <button>Submit</button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <TextField
+        name="content"
+        label="New Post"
+        fullWidth
+        multiline
+        rows={4}
+        margin="normal"
+        variant="outlined"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+      />
+      <Button variant="contained" color="primary" type="submit">
+        Submit
+      </Button>
+    </form>
   );
 }
